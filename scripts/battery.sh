@@ -112,6 +112,7 @@ battery_status()
 main()
 {
   bat_label=$(get_tmux_option "@dracula-battery-label" "♥")
+  bat_hide_if_charging_and_full=$(get_tmux_option "@dracula-battery-hide-charging-full" false)
   bat_stat=$(battery_status)
   bat_perc=$(battery_percent)
 
@@ -120,7 +121,11 @@ main()
   elif [ -z "$bat_perc" ]; then # In case it is a desktop with no battery percent, only AC power
     echo "$bat_label $bat_stat"
   else
-    echo "$bat_label $bat_stat $bat_perc"
+	if [ $bat_stat =  "AC" ] && [ $bat_perc = "100%" ] && $bat_hide_if_charging_and_full; then
+		echo "$bat_label"
+	else
+    	echo "$bat_label $bat_stat $bat_perc"
+	fi
   fi
 }
 
