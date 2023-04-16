@@ -136,9 +136,15 @@ main()
       script="#($current_dir/cwd.sh)"
 
     elif [ $plugin = "git" ]; then
-      IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-git-colors" "green dark_gray")
+	  use_gitmux=$(get_tmux_option "@dracula-git-use-gitmux" false)
       tmux set-option -g status-right-length 250
-      script="#($current_dir/git.sh)"
+	  if $use_gitmux; then 
+      	  IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-gitmux-colors" "gray orange")
+	      script="#($current_dir/gitmux.sh)"
+	  else
+	      script="#($current_dir/git.sh)"
+      	  IFS=' ' read -r -a colors  <<< $(get_tmux_option "@dracula-git-colors" "green dark_gray")
+	  fi
 
     elif [ $plugin = "battery" ]; then
       IFS=' ' read -r -a colors <<< $(get_tmux_option "@dracula-battery-colors" "pink dark_gray")
