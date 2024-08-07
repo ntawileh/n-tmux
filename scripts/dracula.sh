@@ -16,7 +16,7 @@ main()
   show_powerline=$(get_tmux_option "@dracula-show-powerline" false)
   show_flags=$(get_tmux_option "@dracula-show-flags" false)
   show_left_icon=$(get_tmux_option "@dracula-show-left-icon" smiley)
-  show_left_icon_padding=$(get_tmux_option "@dracula-left-icon-padding" 1)
+  show_left_icon_padding=$(get_tmux_option "@dracula-left-icon-padding" 0)
   show_military=$(get_tmux_option "@dracula-military-time" false)
   show_timezone=$(get_tmux_option "@dracula-show-timezone" true)
   show_left_sep=$(get_tmux_option "@dracula-show-left-sep" )
@@ -30,14 +30,19 @@ main()
   show_empty_plugins=$(get_tmux_option "@dracula-show-empty-plugins" true)
 
   # Dracula Color Pallette
-  white='#f8f8f2'
-  gray='#44475a'
+#  white='#f8f8f2'
+  white='#cad3f5'
+#  gray='#44475a'
+  gray='#363a4f'
   dark_gray='#282a36'
   light_purple='#bd93f9'
-  dark_purple='#6272a4'
+ # light_purple='#d3baf7'
+  #dark_purple='#6272a4'
+  dark_purple='#4d5f94'
   cyan='#8be9fd'
   green='#50fa7b'
-  orange='#ffb86c'
+ # orange='#ffb86c'
+  orange='#f5a97f'
   red='#ff5555'
   pink='#ff79c6'
   yellow='#f1fa8c'
@@ -85,8 +90,10 @@ main()
       flags=""
       current_flags="";;
     true)
-      flags="#{?window_flags,#[fg=${dark_purple}]#{window_flags},}"
-      current_flags="#{?window_flags,#[fg=${light_purple}]#{window_flags},}"
+      flags="#{?window_flags,#[fg=${pink}]#{window_flags},}"
+      current_flags=""
+      #flags="#{?window_flags,#[fg=${dark_purple}]#{window_flags},}"
+      #current_flags="#{?window_flags,#[fg=${pink}]#{window_flags},}"
   esac
 
   # sets refresh interval to every 5 seconds
@@ -119,7 +126,7 @@ main()
 
   # Status left
   if $show_powerline; then
-    tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon} #[fg=${green},bg=${gray}]#{?client_prefix,#[fg=${yellow}],}${left_sep}"
+    tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon} #[fg=${green},bg=${gray}]#{?client_prefix,#[fg=${yellow}],}${left_sep}#[fg=${white},bg=${gray}] "
     powerbg=${gray}
   else
     tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon}"
@@ -239,7 +246,8 @@ main()
 
   # Window option
   if $show_powerline; then
-    tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${dark_purple}]${left_sep}#[fg=${white},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
+    #tmux set-window-option -g window-status-current-format "#[fg=${dark_purple},bg=${gray}]${right_sep}#[fg=${white},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
+    tmux set-window-option -g window-status-current-format "#[fg=${white},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
   else
     tmux set-window-option -g window-status-current-format "#[fg=${white},bg=${dark_purple}] #I #W${current_flags} "
   fi
