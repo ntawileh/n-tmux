@@ -3,8 +3,8 @@
 main() {
   pom=$(~/bin/pom | head -1)
 
-  if [[ $pom == "🍅" ]]; then
-	  echo ""
+  if [[ $pom == "🍅" || $pom == "󱎫" ]]; then
+    echo ""
   else
     echo $pom
   fi
