@@ -181,6 +181,10 @@ main() {
       IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-battery-colors" "pink dark_gray")
       script="#($current_dir/battery.sh)"
 
+    elif [ $plugin = "pomodoro" ]; then
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-pomodoro-colors" "sapphire dark_gray")
+      script="#($current_dir/pomodoro.sh)"
+
     elif [ $plugin = "gpu-usage" ]; then
       IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-gpu-usage-colors" "pink dark_gray")
       script="#($current_dir/gpu_usage.sh)"
