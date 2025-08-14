@@ -27,42 +27,10 @@ main() {
   show_kubernetes_context_label=$(get_tmux_option "@dracula-kubernetes-context-label" "")
   IFS=' ' read -r -a plugins <<<$(get_tmux_option "@dracula-plugins" "battery network weather")
   show_empty_plugins=$(get_tmux_option "@dracula-show-empty-plugins" true)
+  colors_file=$(get_tmux_option "@dracula-colors-file" "$current_dir/colors.sh")
 
-  # Catppuccin Macchiato Color Pallette
-  bg='#24273a'
-  fg='#cad3f5'
-  dark_purple='#c6a0f6'
-  light_purple='#b7bdf8'
-  orange='#f5a97f'
-  red="#ed8796"
-  cyan="#91d7e3"
-  green="#a6da95"
-  pink="#f5bde6"
-  yellow="#eed49f"
-  maroon="#ee99a0"
-  teal="#8bd5ca"
-  sapphire="#7dc4e4"
-  blue="#8aadf4"
-  rosewater="#f4dbd6"
-  flamingo="#f0c6c6"
-  dark_gray="#24273a"
-  #gray="#cad3f5"
-  gray='#363a4f'
-  white='#cad3f5'
+  source $colors_file
 
-  # Dracula Color Pallette
-  # white='#cad3f5'
-  # gray='#363a4f'
-  # dark_gray='#282a36'
-  # light_purple='#bd93f9'
-  # dark_purple='#4d5f94'
-  # cyan='#8be9fd'
-  # green='#50fa7b'
-  # orange='#f5a97f'
-  # red='#ff5555'
-  # pink='#ff79c6'
-  # yellow='#f1fa8c'
-  #
   # Handle left icon configuration
   case $show_left_icon in
   smiley)
