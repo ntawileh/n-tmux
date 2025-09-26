@@ -20,7 +20,7 @@ main() {
   show_timezone=$(get_tmux_option "@dracula-show-timezone" true)
   show_left_sep=$(get_tmux_option "@dracula-show-left-sep" )
   show_right_sep=$(get_tmux_option "@dracula-show-right-sep" )
-  show_border_contrast=$(get_tmux_option "@dracula-border-contrast" false)
+  show_border_contrast=$(get_tmux_option "@dracula-border-contrast" true)
   show_day_month=$(get_tmux_option "@dracula-day-month" false)
   show_refresh=$(get_tmux_option "@dracula-refresh-rate" 5)
   time_format=$(get_tmux_option "@dracula-time-format" "%Y-%m-%d(%a) %H:%M")
@@ -104,24 +104,24 @@ main() {
 
   # pane border styling
   if $show_border_contrast; then
-    tmux set-option -g pane-active-border-style "fg=${light_purple}"
+    tmux set-option -g pane-active-border-style "fg=${color3}"
   else
-    tmux set-option -g pane-active-border-style "fg=${dark_purple}"
+    tmux set-option -g pane-active-border-style "fg=${muted}"
   fi
-  tmux set-option -g pane-border-style "fg=${gray}"
+  tmux set-option -g pane-border-style "fg=${overlay}"
 
   # message styling
-  tmux set-option -g message-style "bg=${gray},fg=${white}"
+  tmux set-option -g message-style "bg=${overlay},fg=${text}"
 
   # status bar
-  tmux set-option -g status-style "bg=${gray},fg=${white}"
+  tmux set-option -g status-style "bg=${overlay},fg=${text}"
 
   # Status left
   if $show_powerline; then
-    tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon} #[fg=${green},bg=${gray}]#{?client_prefix,#[fg=${yellow}],}${left_sep}#[fg=${white},bg=${gray}] "
+    tmux set-option -g status-left "#[bg=${color1},fg=${highlight1}]#{?client_prefix,#[bg=${color2}],} ${left_icon} #[fg=${color1},bg=${overlay}]#{?client_prefix,#[fg=${color1}],}${left_sep}#[fg=${text},bg=${overlay}] "
     powerbg=${gray}
   else
-    tmux set-option -g status-left "#[bg=${green},fg=${dark_gray}]#{?client_prefix,#[bg=${yellow}],} ${left_icon} #[bg=${dark_gray},fg=${white}] "
+    tmux set-option -g status-left "#[bg=${color1},fg=${highlight1}]#{?client_prefix,#[bg=${color2}],} ${left_icon} #[bg=${overlay},fg=${color1}] "
   fi
 
   # Status right
@@ -130,7 +130,7 @@ main() {
   for plugin in "${plugins[@]}"; do
 
     if [ $plugin = "cwd" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-cwd-colors" "dark_gray white")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-cwd-colors" "text overlay")
       tmux set-option -g status-right-length 250
       script="#($current_dir/cwd.sh)"
 
@@ -138,60 +138,60 @@ main() {
       use_gitmux=$(get_tmux_option "@dracula-git-use-gitmux" false)
       tmux set-option -g status-right-length 250
       if $use_gitmux; then
-        IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-gitmux-colors" "gray orange")
+        IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-gitmux-colors" "color2 overlay")
         script="#($current_dir/gitmux.sh)"
       else
         script="#($current_dir/git.sh)"
-        IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-git-colors" "green dark_gray")
+        IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-git-colors" "color2 overlay")
       fi
 
     elif [ $plugin = "battery" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-battery-colors" "pink dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-battery-colors" "color5 highlight1")
       script="#($current_dir/battery.sh)"
 
     elif [ $plugin = "pomodoro" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-pomodoro-colors" "sapphire dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-pomodoro-colors" "color4 highlight1")
       script="#($current_dir/pomodoro.sh)"
 
     elif [ $plugin = "gpu-usage" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-gpu-usage-colors" "pink dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-gpu-usage-colors" "color4 highlight1")
       script="#($current_dir/gpu_usage.sh)"
 
     elif [ $plugin = "cpu-usage" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-cpu-usage-colors" "orange dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-cpu-usage-colors" "color4 highlight1")
       script="#($current_dir/cpu_info.sh)"
 
     elif [ $plugin = "ram-usage" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-ram-usage-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-ram-usage-colors" "color4 highlight1")
       script="#($current_dir/ram_info.sh)"
 
     elif [ $plugin = "network" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-colors" "color4 highlight1")
       script="#($current_dir/network.sh)"
 
     elif [ $plugin = "network-bandwidth" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-bandwidth-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-bandwidth-colors" "color4 highlight1")
       tmux set-option -g status-right-length 250
       script="#($current_dir/network_bandwidth.sh)"
 
     elif [ $plugin = "network-ping" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-ping-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-ping-colors" "color4 highlight1")
       script="#($current_dir/network_ping.sh)"
 
     elif [ $plugin = "network-vpn" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-vpn-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-network-vpn-colors" "color4 highlight1")
       script="#($current_dir/network_vpn.sh)"
 
     elif [ $plugin = "attached-clients" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-attached-clients-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-attached-clients-colors" "color4 highlight1")
       script="#($current_dir/attached_clients.sh)"
 
     elif [ $plugin = "spotify-tui" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-spotify-tui-colors" "green dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-spotify-tui-colors" "color4 highlight1")
       script="#($current_dir/spotify-tui.sh)"
 
     elif [ $plugin = "kubernetes-context" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-kubernetes-context-colors" "cyan dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-kubernetes-context-colors" "color4 highlight1")
       script="#($current_dir/kubernetes_context.sh $show_kubernetes_context_label)"
 
     elif [ $plugin = "weather" ]; then
@@ -201,11 +201,11 @@ main() {
         sleep 0.01
       done
 
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-weather-colors" "orange dark_gray")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-weather-colors" "color4 highlight1")
       script="#(cat $datafile)"
 
     elif [ $plugin = "time" ]; then
-      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-time-colors" "dark_purple white")
+      IFS=' ' read -r -a colors <<<$(get_tmux_option "@dracula-time-colors" "overlay text")
       if [ -n "$time_format" ]; then
         script=${time_format}
       else
@@ -243,12 +243,12 @@ main() {
   # Window option
   if $show_powerline; then
     #tmux set-window-option -g window-status-current-format "#[fg=${dark_purple},bg=${gray}]${right_sep}#[fg=${white},bg=${dark_purple}] #I #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
-    tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${dark_purple}] #I  #W${current_flags} #[fg=${dark_purple},bg=${gray}]${left_sep}"
+    tmux set-window-option -g window-status-current-format "#[fg=${highlight2},bg=${color2}] #I  #W${current_flags} #[fg=${color2},bg=${overlay}]${left_sep}"
   else
-    tmux set-window-option -g window-status-current-format "#[fg=${gray},bg=${light_purple}] #I #W${current_flags} "
+    tmux set-window-option -g window-status-current-format "#[fg=${highlight2},bg=${color2}] #I #W${current_flags} "
   fi
 
-  tmux set-window-option -g window-status-format "#[fg=${dark_gray}]#[bg=${white}] #I #[fg=${white}]#[bg=${gray}]  #W${flags}"
+  tmux set-window-option -g window-status-format "#[fg=${color2}]#[bg=${overlay}] #I #[fg=${text}]#[bg=${overlay}]  #W${flags}"
   tmux set-window-option -g window-status-activity-style "bold"
   tmux set-window-option -g window-status-bell-style "bold"
 }
